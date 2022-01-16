@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
+import 'package:provider/provider.dart';
 
 import 'package:tt/Country%20Capital%20Currency/home_page.dart';
 import 'package:tt/DataBase%20Basic/database_read_write.dart';
@@ -12,6 +14,8 @@ import 'package:tt/google_maps.dart';
 import 'package:tt/image_upload.dart';
 import 'package:tt/modal_bottom_sheet_class.dart';
 import 'package:tt/popupmenubar.dart';
+import 'package:tt/provider/counter.dart';
+import 'package:tt/provider/read_provider.dart';
 import 'package:tt/searchbarclass.dart';
 import 'package:tt/shared_preferences_class.dart';
 import 'package:tt/silverappbar.dart';
@@ -49,8 +53,15 @@ import 'imagepickerclass.dart';
 
 void main() {
   runApp(const MyApp());
-  // runApp(const AppbarAndContainer());
 }
+
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await firebase_core.Firebase.initializeApp();
+//   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
+//     runApp(MyApp());
+//   });
+// }
 
 // Future<void> main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -68,51 +79,55 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: "Flutter Training App",
-      debugShowCheckedModeBanner: false,
-      // home: RowClasses(),
-      // home: ColumnClasses(),
-      // home: StackClass(),
-      // home: RaisedButtonClass(),
-      // home: TextFieldClass(),
-      // home: States(),
-      // home: ListViewClass(),
-      // home: BlogHomePage(),
-      // home: GridViewClass(),
-      // home: GridViewBuilder(),
-      // home: TableClass(),
-      // home: CountryDetails(),
-      // home: DrawerClass(),
-      // home: Bkash(),
-      // home: TabBarClass(),
-      // home: BottomNavigationBarClass(),
-      // home: AyToastKha(),
-      // home: PopupMenuBarClass(),
-      // home: TooltioClass(),
-      // home: SwitchClass(),
-      // home: SliverAppBarClass(),
-      // home: ImagePickerClass(),
-      // home: SnackBarClass(),
-      // home: SimpleCalculator(),
-      // home: CurveNavigationBarClass(),
-      // home: DateAndTimePicker(),
-      // home: DropDownBtn(),
-      // home: SearchBarClass(),
-      // home: UrlLauncherClass(),
-      // home: HomePage(),
-      // home: ModalBottomSheetClass(),
-      // home: UserListClass(),
-      // home: SharedPreferencesClass(),
-      // home: WebViewClass(),
-      // home: DropDown_Menu(),
-      // home: SpleshScreenClass(),
-      // home: HomePage_Travel_app(),
-      // home: GoogleMapClass(),
-      // home: TravelSpot(),
-      // home: DatabaseBasic(),
-      home: AlertDialogClass(),
-      // home: ImageUploadClass(),
+    return ChangeNotifierProvider(
+      create: (context)=> CounterProvider(),
+      child: MaterialApp(
+        title: "Flutter Training App",
+        debugShowCheckedModeBanner: false,
+        // home: RowClasses(),
+        // home: ColumnClasses(),
+        // home: StackClass(),
+        // home: RaisedButtonClass(),
+        // home: TextFieldClass(),
+        // home: States(),
+        // home: ListViewClass(),
+        // home: BlogHomePage(),
+        // home: GridViewClass(),
+        // home: GridViewBuilder(),
+        // home: TableClass(),
+        // home: CountryDetails(),
+        // home: DrawerClass(),
+        // home: Bkash(),
+        // home: TabBarClass(),
+        // home: BottomNavigationBarClass(),
+        // home: AyToastKha(),
+        // home: PopupMenuBarClass(),
+        // home: TooltioClass(),
+        // home: SwitchClass(),
+        // home: SliverAppBarClass(),
+        // home: ImagePickerClass(),
+        // home: SnackBarClass(),
+        // home: SimpleCalculator(),
+        // home: CurveNavigationBarClass(),
+        // home: DateAndTimePicker(),
+        // home: DropDownBtn(),
+        // home: SearchBarClass(),
+        // home: UrlLauncherClass(),
+        // home: HomePage(),
+        // home: ModalBottomSheetClass(),
+        // home: UserListClass(),
+        // home: SharedPreferencesClass(),
+        // home: WebViewClass(),
+        // home: DropDown_Menu(),
+        // home: SpleshScreenClass(),
+        // home: HomePage_Travel_app(),
+        // home: GoogleMapClass(),
+        // home: TravelSpot(),
+        // home: DatabaseBasic(),
+        // home: AlertDialogClass(),
+        // home: ImageUploadClass(),
+        home: ReadProvider(),
+      ),
     );
   }
 }
