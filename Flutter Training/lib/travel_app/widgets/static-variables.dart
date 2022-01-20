@@ -10,6 +10,8 @@ class StaticVariables{
     ["সংরক্ষিত তথ্য", Icons.save],
   ];
 
+  static final TravelRegion = ['Travel Bangladesh', 'Travel World'];
+
   static const List<String> allCountries = [
     'Bangladesh', 'India', 'Pakistan', 'Bhutan', 'Nepal', 'Sri lanka',
     'Australia', 'USA', 'Canada', 'China', 'Japan',

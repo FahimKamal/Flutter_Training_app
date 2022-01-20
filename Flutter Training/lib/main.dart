@@ -39,6 +39,7 @@ import 'package:tt/test_design/bkash.dart';
 import 'package:tt/test_design/country_details.dart';
 import 'package:tt/textFieldclass.dart';
 import 'package:tt/tooltipclass.dart';
+import 'package:tt/travel_app/admin/add_travel_spot.dart';
 import 'package:tt/travel_app/travel_pages/homepage.dart';
 import 'package:tt/splesh_screenf.dart';
 import 'package:tt/travel_app/travel_pages/homepage_gridview_builder.dart';
@@ -126,7 +127,8 @@ class _MyAppState extends State<MyApp> {
         // home: DatabaseBasic(),
         // home: AlertDialogClass(),
         // home: ImageUploadClass(),
-        home: ReadProvider(),
+        // home: ReadProvider(),
+        home: AddTravelSpot(),
       ),
     );
   }
