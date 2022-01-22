@@ -20,11 +20,11 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
         title: Text("Add Travel Spot"),
         centerTitle: true,
       ),
-      body: _bodyUI(),
+      body: bodyUI(),
     );
   }
 
-  Widget _bodyUI() {
+  Widget bodyUI() {
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.all(10),
@@ -76,104 +76,31 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
           SizedBox(
             height: size.width * 0.04,
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-            decoration: BoxDecoration(
-              color: Colors.greenAccent.withOpacity(0.2),
-              borderRadius: BorderRadius.all(Radius.circular(3)),
-              border: Border.all(color: Colors.black, width: 3),
-            ),
-            width: size.width,
-            child: DropdownButtonHideUnderline(
-                child: DropdownButton(
+          dropdownMenu(
               value: selectTravelRegion,
-              hint: Container(
-                width: size.width * 0.75,
-                child: Text(
-                  "Select Region",
-                  style: TextStyle(fontSize: size.height * 0.023),
-                ),
-              ),
-              items: StaticVariables.TravelRegion.map((selectTravelRegion) {
-                return DropdownMenuItem(
-                  child: Container(
-                    width: size.width * 0.75,
-                    child: Text(
-                      selectTravelRegion,
-                      style: TextStyle(color: Colors.green, fontSize: 16),
-                    ),
-                  ),
-                  value: selectTravelRegion,
-                );
-              }).toList(),
+              size: size,
+              label: "Select Region",
+              items: dropdownMenuGenerator(StaticVariables.TravelRegion, size),
               onChanged: (newValue) {
                 setState(() {
                   selectTravelSpot = null;
                   selectTravelRegion = newValue as String;
                 });
-              },
-            )),
-          ),
+              }),
           SizedBox(
             height: size.width * 0.04,
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-            decoration: BoxDecoration(
-              color: Colors.greenAccent.withOpacity(0.2),
-              borderRadius: BorderRadius.all(Radius.circular(3)),
-              border: Border.all(color: Colors.black, width: 3),
-            ),
-            width: size.width,
-            child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  value: selectTravelSpot,
-                  hint: Container(
-                    width: size.width * 0.75,
-                    child: Text(
-                      "Select Travel Spot",
-                      style: TextStyle(fontSize: size.height * 0.023),
-                    ),
-                  ),
-                  items: selectTravelRegion == null
-                      ? null
-                      : selectTravelRegion == 'Travel Bangladesh'
-                          ? StaticVariables.bdDistrict.map((selectTravelSpot) {
-                              return DropdownMenuItem(
-                                child: Container(
-                                  width: size.width * 0.75,
-                                  child: Text(
-                                    selectTravelSpot,
-                                    style: TextStyle(
-                                        color: Colors.green, fontSize: 16),
-                                  ),
-                                ),
-                                value: selectTravelSpot,
-                              );
-                            }).toList()
-                          : selectTravelRegion == 'Travel World'
-                              ? StaticVariables.allCountries.map((selectTravelSpot) {
-                                  return DropdownMenuItem(
-                                    child: Container(
-                                      width: size.width * 0.75,
-                                      child: Text(
-                                        selectTravelSpot,
-                                        style: TextStyle(
-                                            color: Colors.green, fontSize: 16),
-                                      ),
-                                    ),
-                                    value: selectTravelSpot,
-                                  );
-                                }).toList()
-                              : null,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectTravelSpot = null;
-                      selectTravelSpot = newValue as String;
-                    });
-                  },
-              )
-            ),
+          dropdownMenu(
+            value: selectTravelSpot,
+            size: size,
+            label: "Select Travel Spot",
+            items: travelSpotSelector(selectTravelRegion, size),
+            onChanged: (newValue) {
+              setState(() {
+                selectTravelSpot = null;
+                selectTravelSpot = newValue as String;
+              });
+            },
           ),
           SizedBox(
             height: size.width * 0.04,
@@ -191,5 +118,63 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
         ],
       ),
     );
+  }
+
+  Container dropdownMenu(
+      {required Size size,
+      required String label,
+      required String? value,
+      required List<DropdownMenuItem<String>>? items,
+      required ValueChanged onChanged}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.greenAccent.withOpacity(0.2),
+        borderRadius: BorderRadius.all(Radius.circular(3)),
+        border: Border.all(color: Colors.black, width: 3),
+      ),
+      width: size.width,
+      child: DropdownButtonHideUnderline(
+          child: DropdownButton(
+        value: value,
+        hint: Container(
+          width: size.width * 0.75,
+          child: Text(
+            label,
+            style: TextStyle(fontSize: size.height * 0.023),
+          ),
+        ),
+        items: items,
+        onChanged: onChanged,
+      )),
+    );
+  }
+
+  List<DropdownMenuItem<String>>? travelSpotSelector(
+      String? region, Size size) {
+    if (region == null) {
+      return null;
+    } else if (region == 'Travel Bangladesh') {
+      return dropdownMenuGenerator(StaticVariables.bdDistrict, size);
+    } else if (region == 'Travel World') {
+      return dropdownMenuGenerator(StaticVariables.allCountries, size);
+    }
+    return null;
+  }
+
+  List<DropdownMenuItem<String>> dropdownMenuGenerator(
+      List<String> list, Size size) {
+    return list.map((selectTravelSpot) {
+      return DropdownMenuItem(
+        child: Container(
+          width: size.width * 0.75,
+          child: Text(
+            selectTravelSpot,
+            style: TextStyle(color: Colors.green, fontSize: 16),
+          ),
+        ),
+        value: selectTravelSpot,
+      );
+    }).toList();
   }
 }
