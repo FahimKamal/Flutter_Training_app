@@ -1,4 +1,10 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:tt/travel_app/widgets/buttons.dart';
 import 'package:tt/travel_app/widgets/form_decoration.dart';
 import 'package:tt/travel_app/widgets/static-variables.dart';
 
@@ -12,6 +18,55 @@ class AddTravelSpot extends StatefulWidget {
 class _AddTravelSpotState extends State<AddTravelSpot> {
   String? selectTravelRegion;
   String? selectTravelSpot;
+
+  File? _image;
+
+  Future<void> uploadFile() async {
+    String imageName = DateTime.now().microsecondsSinceEpoch.toString();
+    var imageFile =
+        FirebaseStorage.instance.ref('User images').child("$imageName.jpg");
+    UploadTask task = imageFile.putFile(_image!);
+    TaskSnapshot snapshot = await task;
+
+    /// For download the image.
+    final uri = await snapshot.ref.getDownloadURL();
+
+    /// Store the image url into the firestore database.
+    await FirebaseFirestore.instance
+        .collection('images')
+        .doc()
+        .set({'img': uri});
+    print(uri);
+  }
+
+  Future CameraImage() async {
+    final picker = ImagePicker();
+    final pickFile = await picker.pickImage(
+        source: ImageSource.camera, maxHeight: 300, maxWidth: 300);
+    setState(() {
+      _image = File(pickFile!.path);
+    });
+  }
+
+  Future GalleryImage() async {
+    final picker = ImagePicker();
+    final pickFile = await picker.pickImage(
+        source: ImageSource.gallery, maxHeight: 300, maxWidth: 300);
+    setState(() {
+      _image = File(pickFile!.path);
+    });
+  }
+
+  void showMessage(String message){
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 3),
+      action: SnackBarAction(
+        label: 'ACTION',
+        onPressed: () { },
+      ),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,40 +85,83 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
       padding: EdgeInsets.all(10),
       child: ListView(
         children: [
-          ClipRRect(
-            child: Image.asset(
-              "images/Icons/gallery.png",
-              width: size.width * 0.3,
-              height: size.height * 0.3,
-              color: Colors.pinkAccent,
-              fit: BoxFit.fitHeight,
-            ),
-          ),
+          _image == null
+              ? ClipRRect(
+                  child: Image.asset(
+                    "images/Icons/gallery.png",
+                    width: size.width * 0.3,
+                    height: size.height * 0.3,
+                    color: Colors.pinkAccent,
+                    fit: BoxFit.fitHeight,
+                  ),
+                )
+              : ClipRRect(
+                  child: Image.file(
+                    _image!,
+                    width: size.width * 0.3,
+                    height: size.height * 0.3,
+                    // color: Colors.pinkAccent,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
           SizedBox(
             height: size.width * 0.04,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.camera_alt,
-                    size: 40,
-                    color: Colors.pinkAccent,
-                  )),
-              SizedBox(
-                width: size.width * 0.08,
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.image,
-                    size: 40,
-                    color: Colors.pinkAccent,
-                  ))
-            ],
-          ),
+          _image == null
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          CameraImage();
+                        },
+                        icon: Icon(
+                          Icons.camera_alt,
+                          size: 40,
+                          color: Colors.pinkAccent,
+                        )),
+                    SizedBox(
+                      width: size.width * 0.08,
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          GalleryImage();
+                        },
+                        icon: Icon(
+                          Icons.image,
+                          size: 40,
+                          color: Colors.pinkAccent,
+                        ))
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+
+                        },
+                        icon: Icon(
+                          Icons.cloud_upload,
+                          size: 40,
+                          color: Colors.pinkAccent,
+                        )),
+                    SizedBox(
+                      width: size.width * 0.08,
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _image = null;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.clear,
+                          size: 40,
+                          color: Colors.pinkAccent,
+                        ))
+                  ],
+                ),
           Divider(
             height: 50,
           ),
@@ -115,6 +213,12 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
           SizedBox(
             height: size.width * 0.04,
           ),
+          SubmitButton(onTap: (){
+            showMessage("Button working");
+          },),
+          SizedBox(
+            height: size.width * 0.04,
+          ),
         ],
       ),
     );
@@ -130,7 +234,7 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       decoration: BoxDecoration(
         color: Colors.greenAccent.withOpacity(0.2),
-        borderRadius: BorderRadius.all(Radius.circular(3)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.black, width: 3),
       ),
       width: size.width,
@@ -178,3 +282,5 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
     }).toList();
   }
 }
+
+

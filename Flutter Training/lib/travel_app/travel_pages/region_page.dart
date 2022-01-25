@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tt/travel_app/admin/add_travel_spot.dart';
 import 'package:tt/travel_app/travel_data/travel_data.dart';
 import 'package:tt/travel_app/travel_pages/travel_spot.dart';
 import 'package:tt/travel_app/widgets/appbar_design.dart';
 import 'package:tt/travel_app/widgets/static-variables.dart';
 
 class RegionPage extends StatefulWidget {
-
   int? index;
   String? region;
 
@@ -16,17 +16,15 @@ class RegionPage extends StatefulWidget {
 }
 
 class _RegionPageState extends State<RegionPage> {
-
   List<String>? data;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.index == 0){
+    if (widget.index == 0) {
       data = bdTravelSpots.keys.toList();
-    }
-    else if(widget.index == 1){
+    } else if (widget.index == 1) {
       data = worldTravelSpots.keys.toList();
     }
   }
@@ -36,35 +34,46 @@ class _RegionPageState extends State<RegionPage> {
     return Scaffold(
       appBar: AppBarDesign('${widget.region}'),
       body: _body(),
-    );
-  }
-
-  Widget _body(){
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisExtent: 50,
-        ),
-        itemCount: data?.length,
-        itemBuilder: (context, index){
-          return CustomCard('${data![index]}');
-        }
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return AddTravelSpot();
+          }));
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.pink,
       ),
     );
   }
 
-  Widget CustomCard(String text){
+  Widget _body() {
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisExtent: 50,
+          ),
+          itemCount: data?.length,
+          itemBuilder: (context, index) {
+            return CustomCard('${data![index]}');
+          }),
+    );
+  }
+
+  Widget CustomCard(String text) {
     return Card(
       child: InkWell(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => TravelSpot(index: widget.index, region: text,) ));
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TravelSpot(
+                        index: widget.index,
+                        region: text,
+                      )));
         },
-        child: Container(
-            padding: EdgeInsets.all(8),
-            child: Text(text)
-        ),
+        child: Container(padding: EdgeInsets.all(8), child: Text(text)),
       ),
     );
   }

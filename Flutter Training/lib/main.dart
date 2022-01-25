@@ -121,14 +121,14 @@ class _MyAppState extends State<MyApp> {
         // home: WebViewClass(),
         // home: DropDown_Menu(),
         // home: SpleshScreenClass(),
-        // home: HomePage_Travel_app(),
+        home: HomePage_Travel_app(),
         // home: GoogleMapClass(),
         // home: TravelSpot(),
         // home: DatabaseBasic(),
         // home: AlertDialogClass(),
         // home: ImageUploadClass(),
         // home: ReadProvider(),
-        home: AddTravelSpot(),
+        // home: AddTravelSpot(),
       ),
     );
   }

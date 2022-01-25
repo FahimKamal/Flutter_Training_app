@@ -18,7 +18,7 @@ class _HomePage_Travel_appState extends State<HomePage_Travel_app> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarDesign('HomePage'),
+      // appBar: AppBarDesign('HomePage'),
       body: _bodyUI(),
     );
   }
