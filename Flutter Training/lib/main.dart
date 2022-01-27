@@ -44,6 +44,7 @@ import 'package:tt/travel_app/travel_pages/homepage.dart';
 import 'package:tt/splesh_screenf.dart';
 import 'package:tt/travel_app/travel_pages/homepage_gridview_builder.dart';
 import 'package:tt/travel_app/travel_pages/travel_spot.dart';
+import 'package:tt/travel_app/widgets/travel_provider.dart';
 import 'package:tt/url_launcher_class.dart';
 import 'package:tt/webview_class.dart';
 
@@ -51,10 +52,10 @@ import 'border_color.dart';
 import 'dropdownbtn.dart';
 import 'gridviewbuilder.dart';
 import 'imagepickerclass.dart';
-
-void main() {
-  runApp(const MyApp());
-}
+//
+// void main() {
+//   runApp(const MyApp());
+// }
 
 // Future<void> main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -64,11 +65,11 @@ void main() {
 //   });
 // }
 
-// Future<void> main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await firebase_core.Firebase.initializeApp();
-//   runApp(MyApp());
-// }
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await firebase_core.Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -80,8 +81,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context)=> CounterProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => TravelProvider()),
+      ],
       child: MaterialApp(
         title: "Flutter Training App",
         debugShowCheckedModeBanner: false,

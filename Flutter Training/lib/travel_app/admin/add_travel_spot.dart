@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tt/travel_app/widgets/buttons.dart';
 import 'package:tt/travel_app/widgets/form_decoration.dart';
+import 'package:tt/travel_app/widgets/notification_widgets.dart';
 import 'package:tt/travel_app/widgets/static-variables.dart';
+import 'package:tt/travel_app/widgets/travel_provider.dart';
+import 'package:provider/provider.dart';
 
 class AddTravelSpot extends StatefulWidget {
   const AddTravelSpot({Key? key}) : super(key: key);
@@ -16,6 +19,8 @@ class AddTravelSpot extends StatefulWidget {
 }
 
 class _AddTravelSpotState extends State<AddTravelSpot> {
+  final _formKey = GlobalKey<FormState>();
+
   String? selectTravelRegion;
   String? selectTravelSpot;
 
@@ -57,29 +62,31 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
     });
   }
 
-  void showMessage(String message){
+  void showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
       duration: const Duration(seconds: 3),
       action: SnackBarAction(
         label: 'ACTION',
-        onPressed: () { },
+        onPressed: () {},
       ),
     ));
   }
 
   @override
   Widget build(BuildContext context) {
+    final TravelProvider travelProvider = Provider.of<TravelProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Travel Spot"),
         centerTitle: true,
       ),
-      body: bodyUI(),
+      body: bodyUI(travelProvider),
     );
   }
 
-  Widget bodyUI() {
+  Widget bodyUI(TravelProvider travelProvider) {
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.all(10),
@@ -138,9 +145,7 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                        onPressed: () {
-
-                        },
+                        onPressed: () {},
                         icon: Icon(
                           Icons.cloud_upload,
                           size: 40,
@@ -162,62 +167,93 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
                         ))
                   ],
                 ),
-          Divider(
-            height: 50,
-          ),
-          TextField(
-            decoration: FormDecoration.copyWith(
-              label: Text("Spot Name"),
+          Divider(height: 50),
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: FormDecoration.copyWith(label: Text("Spot Name")),
+                  onChanged: (value) {
+                    setState(() {
+                      travelProvider.travelModel.spotName = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Fill The Spot Name";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: size.width * 0.04),
+                dropdownMenu(
+                    value: selectTravelRegion,
+                    size: size,
+                    label: "Select Region",
+                    items: dropdownMenuGenerator(
+                        StaticVariables.TravelRegion, size),
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectTravelSpot = null;
+                        selectTravelRegion = newValue as String;
+                        travelProvider.travelModel.travelSpot = null;
+                        travelProvider.travelModel.travelRegion = newValue;
+                      });
+                    }),
+                SizedBox(height: size.width * 0.04),
+                dropdownMenu(
+                  value: selectTravelSpot,
+                  size: size,
+                  label: "Select Travel Spot",
+                  items: travelSpotSelector(selectTravelRegion, size),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectTravelSpot = null;
+                      selectTravelSpot = newValue as String;
+                      travelProvider.travelModel.travelSpot = newValue;
+                    });
+                  },
+                ),
+                SizedBox(height: size.width * 0.04),
+                TextFormField(
+                  maxLines: 5,
+                  decoration: FormDecoration.copyWith(
+                    label: Text("Description"),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      travelProvider.travelModel.description = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Fill The Description.";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: size.width * 0.04),
+                SubmitButton(
+                  onTap: () async {
+                    if (_formKey.currentState!.validate()) {
+                      travelProvider.loadingMgs = "Submitting information...";
+                      showLoadingDialog(context, travelProvider);
+                      await travelProvider.addTravelSpot(
+                        context,
+                        travelProvider,
+                        travelProvider.travelModel,
+                        _image!,
+                      );
+                    }
+                    showMessage("Submitting information.");
+                  },
+                ),
+              ],
             ),
-            onChanged: (value) {},
           ),
           SizedBox(
-            height: size.width * 0.04,
-          ),
-          dropdownMenu(
-              value: selectTravelRegion,
-              size: size,
-              label: "Select Region",
-              items: dropdownMenuGenerator(StaticVariables.TravelRegion, size),
-              onChanged: (newValue) {
-                setState(() {
-                  selectTravelSpot = null;
-                  selectTravelRegion = newValue as String;
-                });
-              }),
-          SizedBox(
-            height: size.width * 0.04,
-          ),
-          dropdownMenu(
-            value: selectTravelSpot,
-            size: size,
-            label: "Select Travel Spot",
-            items: travelSpotSelector(selectTravelRegion, size),
-            onChanged: (newValue) {
-              setState(() {
-                selectTravelSpot = null;
-                selectTravelSpot = newValue as String;
-              });
-            },
-          ),
-          SizedBox(
-            height: size.width * 0.04,
-          ),
-          TextField(
-            maxLines: 5,
-            decoration: FormDecoration.copyWith(
-              label: Text("Description"),
-            ),
-            onChanged: (value) {},
-          ),
-          SizedBox(
-            height: size.width * 0.04,
-          ),
-          SubmitButton(onTap: (){
-            showMessage("Button working");
-          },),
-          SizedBox(
-            height: size.width * 0.04,
+            height: size.width * 0.04
           ),
         ],
       ),
@@ -282,5 +318,3 @@ class _AddTravelSpotState extends State<AddTravelSpot> {
     }).toList();
   }
 }
-
-
