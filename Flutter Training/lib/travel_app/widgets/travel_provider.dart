@@ -21,10 +21,10 @@ class TravelProvider extends ChangeNotifier {
 
   List<TravelModel> get travelSpotList => _travelSpotList;
 
-  set travelSpotList(List<TravelModel> value) {
-    _travelSpotList = value;
-    notifyListeners();
-  }
+  // set travelSpotList(List<TravelModel> value) {
+  //   _travelSpotList = value;
+  //   notifyListeners();
+  // }
 
   String get loadingMgs => _loadingMgs!;
 
@@ -68,8 +68,8 @@ class TravelProvider extends ChangeNotifier {
           'description': travelModel.description,
           'travelRegion': travelModel.travelRegion,
           'travelSpot': travelModel.travelSpot,
-          'timeStamp': timeStamp,
-          'submitDate': null
+          'timeStamp': timeStamp.toString(),
+          'submitDate': submitDate,
         });
 
         Navigator.pop(context);
@@ -87,11 +87,12 @@ class TravelProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> getTravelSpot() async {
+  Future<void> getTravelSpot(String travelSpot) async {
+    print("I am working");
     try {
       await FirebaseFirestore.instance
           .collection('travel_spots')
-          .where('id', isEqualTo: travelModel.id)
+          .where('travelSpot', isEqualTo: travelSpot)
           .get()
           .then((snapShot) {
         _travelSpotList.clear();
@@ -113,7 +114,7 @@ class TravelProvider extends ChangeNotifier {
       print("Length: " + _travelSpotList.length.toString());
       notifyListeners();
     } catch (error) {
-      error.toString();
+      print(error.toString());
     }
   }
 }

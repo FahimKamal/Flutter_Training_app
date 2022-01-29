@@ -3,7 +3,7 @@ import 'package:tt/travel_app/travel_models/travel_model.dart';
 import 'package:tt/travel_app/widgets/appbar_design.dart';
 
 class DetailsPage extends StatefulWidget {
-  DestinationModel? data;
+  TravelModel? data;
   DetailsPage({Key? key, this.data}) : super(key: key);
 
   @override
@@ -25,14 +25,14 @@ class _DetailsPageState extends State<DetailsPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(
-            '${widget.data?.imgurl}',
-            fit: BoxFit.cover,
+          Image.network(
+            '${widget.data?.imageLink}',
+            fit: BoxFit.fitHeight,
             width: double.maxFinite,
             height: 200,
           ),
 
-          Text('${widget.data?.destinationName}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text('${widget.data?.spotName}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           Text('${widget.data?.description}'),
         ],
       ),

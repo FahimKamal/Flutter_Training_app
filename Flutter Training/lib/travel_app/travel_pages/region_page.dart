@@ -23,9 +23,11 @@ class _RegionPageState extends State<RegionPage> {
     // TODO: implement initState
     super.initState();
     if (widget.index == 0) {
-      data = bdTravelSpots.keys.toList();
+      // data = bdTravelSpots.keys.toList();
+      data = StaticVariables.bdDistrict;
     } else if (widget.index == 1) {
-      data = worldTravelSpots.keys.toList();
+      // data = worldTravelSpots.keys.toList();
+      data = StaticVariables.allCountries;
     }
   }
 
@@ -66,12 +68,14 @@ class _RegionPageState extends State<RegionPage> {
       child: InkWell(
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TravelSpot(
-                        index: widget.index,
-                        region: text,
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (context) => TravelSpot(
+                index: widget.index,
+                region: text,
+              ),
+            ),
+          );
         },
         child: Container(padding: EdgeInsets.all(8), child: Text(text)),
       ),

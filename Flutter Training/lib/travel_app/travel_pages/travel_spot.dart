@@ -3,6 +3,8 @@ import 'package:tt/travel_app/travel_data/travel_data.dart';
 import 'package:tt/travel_app/travel_models/travel_model.dart';
 import 'package:tt/travel_app/travel_pages/details_page.dart';
 import 'package:tt/travel_app/widgets/appbar_design.dart';
+import 'package:tt/travel_app/widgets/travel_provider.dart';
+import 'package:provider/provider.dart';
 
 class TravelSpot extends StatefulWidget {
   int? index;
@@ -15,28 +17,28 @@ class TravelSpot extends StatefulWidget {
 }
 
 class _TravelSpotState extends State<TravelSpot> {
-  List<DestinationModel>? data;
+  int counter = 0;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    if(widget.index == 0){
-      data = bdTravelSpots[widget.region];
-    }else if(widget.index == 1){
-      data = worldTravelSpots[widget.region];
-    }
+  _customInitState(TravelProvider travelProvider){
+    setState(() {
+      counter++;
+    });
+    travelProvider.getTravelSpot('${widget.region}');
   }
 
   @override
   Widget build(BuildContext context) {
+    final TravelProvider travelProvider = Provider.of<TravelProvider>(context);
+    if(counter == 0){
+      _customInitState(travelProvider);
+    }
     return Scaffold(
       appBar: AppBarDesign('Travel spot'),
-      body: _body(),
+      body: _body(travelProvider),
     );
   }
 
-  Widget _body(){
+  Widget _body(TravelProvider travelProvider){
     return Container(
       margin: EdgeInsets.all(10),
       child: GridView.builder(
@@ -44,15 +46,15 @@ class _TravelSpotState extends State<TravelSpot> {
             crossAxisCount: 1,
             mainAxisExtent: 300
         ),
-        itemCount: data?.length,
+        itemCount: travelProvider.travelSpotList.length,
         itemBuilder: (context, index){
-          return _CustomContainer(data![index]);
+          return _CustomContainer(travelProvider.travelSpotList[index]);
         },
       ),
     );
   }
 
-  Widget _CustomContainer(DestinationModel data){
+  Widget _CustomContainer(TravelModel data){
     return InkWell(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsPage(data: data) ));
@@ -80,15 +82,15 @@ class _TravelSpotState extends State<TravelSpot> {
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
               ),
-              child: Image.asset(
-                '${data.imgurl}',
+              child: Image.network(
+                '${data.imageLink}',
                 fit: BoxFit.cover,
                 width: double.maxFinite,
                 height: 200,
               ),
             ),
 
-            Text('${data.destinationName}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+            Text('${data.spotName}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
             Text('${data.description}'),
           ],
         ),
