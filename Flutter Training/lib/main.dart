@@ -8,6 +8,7 @@ import 'package:tt/DataBase%20Basic/database_read_write.dart';
 import 'package:tt/User/user_list.dart';
 import 'package:tt/alertdialogclass.dart';
 import 'package:tt/calculator_class.dart';
+import 'package:tt/carousel_image_slider.dart';
 import 'package:tt/curvenavigationbarclass.dart';
 import 'package:tt/dropdown_feature.dart';
 import 'package:tt/google_maps.dart';
@@ -49,13 +50,14 @@ import 'package:tt/url_launcher_class.dart';
 import 'package:tt/webview_class.dart';
 
 import 'border_color.dart';
+import 'carousel_image_slider_demo_examples.dart';
 import 'dropdownbtn.dart';
 import 'gridviewbuilder.dart';
 import 'imagepickerclass.dart';
 //
-// void main() {
-//   runApp(const MyApp());
-// }
+void main() {
+  runApp(const MyApp());
+}
 
 // Future<void> main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -65,11 +67,11 @@ import 'imagepickerclass.dart';
 //   });
 // }
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await firebase_core.Firebase.initializeApp();
-  runApp(MyApp());
-}
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await firebase_core.Firebase.initializeApp();
+//   runApp(MyApp());
+// }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -129,9 +131,12 @@ class _MyAppState extends State<MyApp> {
         // home: TravelSpot(),
         // home: DatabaseBasic(),
         // home: AlertDialogClass(),
-        home: ImageUploadClass(),
+        // home: ImageUploadClass(),
         // home: ReadProvider(),
         // home: AddTravelSpot(),
+        // home: ImageSlider(),
+        // home: ImageSlider(),
+        home: CarouselDemo(),
       ),
     );
   }
