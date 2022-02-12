@@ -11,6 +11,7 @@ import 'package:tt/calculator_class.dart';
 import 'package:tt/carousel_image_slider.dart';
 import 'package:tt/curvenavigationbarclass.dart';
 import 'package:tt/dropdown_feature.dart';
+import 'package:tt/expansion_panel.dart';
 import 'package:tt/google_maps.dart';
 import 'package:tt/image_upload.dart';
 import 'package:tt/modal_bottom_sheet_class.dart';
@@ -136,7 +137,8 @@ class _MyAppState extends State<MyApp> {
         // home: AddTravelSpot(),
         // home: ImageSlider(),
         // home: ImageSlider(),
-        home: CarouselDemo(),
+        // home: CarouselDemo(),
+        home: ExpansionPanelExample(),
       ),
     );
   }

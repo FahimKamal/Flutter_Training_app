@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tt/travel_app/travel_data/travel_data.dart';
 import 'package:tt/travel_app/travel_models/travel_model.dart';
 import 'package:tt/travel_app/travel_pages/details_page.dart';
 import 'package:tt/travel_app/widgets/appbar_design.dart';
